@@ -1,4 +1,6 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.IO;
+using FakeItEasy;
 using NUnit.Framework;
 
 namespace DIContainer
@@ -6,6 +8,8 @@ namespace DIContainer
     [TestFixture]
     public class Program_should
     {
+        TextWriter tw = Console.Out;
+
         [Test]
         public void run_command_by_name()
         {
@@ -13,7 +17,7 @@ namespace DIContainer
             A.CallTo(() => command.Name).Returns("cmd");
             var program = new Program(new CommandLineArgs("CMD"), command);
 
-            program.Run();
+            program.Run(tw);
 
             A.CallTo(() => command.Execute()).MustHaveHappened();
         }
@@ -25,7 +29,7 @@ namespace DIContainer
             A.CallTo(() => command.Name).Returns("cmd");
             var program = new Program(new CommandLineArgs("anotherCmd"), command);
 
-            program.Run();
+            program.Run(tw);
 
             A.CallTo(() => command.Execute()).MustNotHaveHappened();
         }
